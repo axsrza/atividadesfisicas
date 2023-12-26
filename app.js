@@ -1,12 +1,15 @@
 // Configuração do Firebase
 const firebaseConfig = {
-    // Sua configuração do Firebase aqui
+    projectId: "atividadesfisicas-e9c51",  // Use o ID do projeto Firebase
 };
 
 firebase.initializeApp(firebaseConfig);
 
 // Inicialização do Firestore
 const db = firebase.firestore();
+
+// Restante do seu código JavaScript...
+
 
 // Adicione aqui o código JavaScript para manipular os dados e interações com a página
 
