@@ -3,15 +3,11 @@ const firebaseConfig = {
     projectId: "atividadesfisicas-e9c51",  // Use o ID do projeto Firebase
 };
 
+// Inicialização do Firebase
 firebase.initializeApp(firebaseConfig);
 
 // Inicialização do Firestore
 const db = firebase.firestore();
-
-// Restante do seu código JavaScript...
-
-
-// Adicione aqui o código JavaScript para manipular os dados e interações com a página
 
 // Lógica para exibir os campos de detalhes conforme o tipo de atividade selecionada
 document.getElementById("tipoAtividade").addEventListener("change", function() {
@@ -66,7 +62,6 @@ function limparCampos() {
     document.getElementById("tempoPedalada").value = "";
     document.getElementById("passos").value = "";
 }
-// Continuação do app.js
 
 // Lógica para exibir gráficos
 function exibirGraficos() {
