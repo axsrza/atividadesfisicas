@@ -96,6 +96,9 @@ function exibirGraficos() {
             }
         });
 
+        // Configurar adaptador de data
+        Chart.defaults.adapters.date = luxonAdapter;
+
         // Criar gráfico de caminhada
         criarGrafico("graficoCaminhada", "Caminhada", dadosCaminhada);
 
@@ -105,43 +108,43 @@ function exibirGraficos() {
         // Criar gráfico de passos
         criarGrafico("graficoPassos", "Passos", dadosPassos);
     });
+}
 
-    // Função para criar gráfico usando Chart.js
-    function criarGrafico(idCanvas, label, dados) {
-        const ctx = document.getElementById(idCanvas).getContext('2d');
-        new Chart(ctx, {
-            type: 'line',
-            data: {
-                datasets: [{
-                    label: label,
-                    data: dados,
-                    borderColor: 'rgba(75, 192, 192, 1)',
-                    borderWidth: 1,
-                    fill: false
-                }]
-            },
-            options: {
-                scales: {
-                    x: {
-                        type: 'time',
-                        time: {
-                            unit: 'day'
-                        },
-                        title: {
-                            display: true,
-                            text: 'Data'
-                        }
+// Função para criar gráfico usando Chart.js
+function criarGrafico(idCanvas, label, dados) {
+    const ctx = document.getElementById(idCanvas).getContext('2d');
+    new Chart(ctx, {
+        type: 'line',
+        data: {
+            datasets: [{
+                label: label,
+                data: dados,
+                borderColor: 'rgba(75, 192, 192, 1)',
+                borderWidth: 1,
+                fill: false
+            }]
+        },
+        options: {
+            scales: {
+                x: {
+                    type: 'time',
+                    time: {
+                        unit: 'day'
                     },
-                    y: {
-                        title: {
-                            display: true,
-                            text: label === 'Passos' ? 'Quantidade de Passos' : 'Distância (KM)'
-                        }
+                    title: {
+                        display: true,
+                        text: 'Data'
+                    }
+                },
+                y: {
+                    title: {
+                        display: true,
+                        text: label === 'Passos' ? 'Quantidade de Passos' : 'Distância (KM)'
                     }
                 }
             }
-        });
-    }
+        }
+    });
 }
 
 // Chamar a função para exibir os gráficos
