@@ -100,87 +100,50 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     // Lógica para exibir gráficos
-    function exibirGraficos() {
-        // Configurar adaptador de data
-        Chart.register(ChartTime);
+function exibirGraficos() {
+    // Configurar adaptador de data
+    Chart.register(ChartTime);
 
-        // Recuperar dados do Firestore
-        db.collection("atividades").get().then((querySnapshot) => {
-            const dadosCaminhada = [];
-            const dadosPedalada = [];
-            const dadosPassos = [];
+    // Recuperar dados do Firestore
+    db.collection("atividades").get().then((querySnapshot) => {
+        const dadosCaminhada = [];
+        const dadosPedalada = [];
+        const dadosPassos = [];
 
-            querySnapshot.forEach((doc) => {
-                const atividade = doc.data();
-                const data = atividade.data.toDate();
+        querySnapshot.forEach((doc) => {
+            const atividade = doc.data();
+            const data = atividade.data.toDate();
 
-                if (atividade.tipo === "caminhada") {
-                    dadosCaminhada.push({
-                        x: data,
-                        y: atividade.detalhes.km
-                    });
-                } else if (atividade.tipo === "pedalada") {
-                    dadosPedalada.push({
-                        x: data,
-                        y: atividade.detalhes.kmPedalada
-                    });
-                } else if (atividade.tipo === "passos") {
-                    dadosPassos.push({
-                        x: data,
-                        y: atividade.detalhes.passos
-                    });
-                }
-            });
-
-            // Criar gráfico de caminhada
-            criarGrafico("graficoCaminhada", "Caminhada", dadosCaminhada);
-
-            // Criar gráfico de pedalada
-            criarGrafico("graficoPedalada", "Pedalada", dadosPedalada);
-
-            // Criar gráfico de passos
-            criarGrafico("graficoPassos", "Passos", dadosPassos);
-        });
-    }
-
-    // Função para criar gráfico usando Chart.js
-    function criarGrafico(idCanvas, label, dados) {
-        const ctx = document.getElementById(idCanvas).getContext('2d');
-        new Chart(ctx, {
-            type: 'line',
-            data: {
-                datasets: [{
-                    label: label,
-                    data: dados,
-                    borderColor: 'rgba(75, 192, 192, 1)',
-                    borderWidth: 1,
-                    fill: false
-                }]
-            },
-            options: {
-                scales: {
-                    x: {
-                        type: 'time',
-                        time: {
-                            unit: 'day'
-                        },
-                        title: {
-                            display: true,
-                            text: 'Data'
-                        }
-                    },
-                    y: {
-                        title: {
-                            display: true,
-                            text: label === 'Passos' ? 'Quantidade de Passos' : 'Distância (KM)'
-                        }
-                    }
-                }
+            if (atividade.tipo === "caminhada") {
+                dadosCaminhada.push({
+                    x: data,
+                    y: atividade.detalhes.km
+                });
+            } else if (atividade.tipo === "pedalada") {
+                dadosPedalada.push({
+                    x: data,
+                    y: atividade.detalhes.kmPedalada
+                });
+            } else if (atividade.tipo === "passos") {
+                dadosPassos.push({
+                    x: data,
+                    y: atividade.detalhes.passos
+                });
             }
         });
-    }
 
-    // Chamar a função para exibir os gráficos após o DOM ser completamente carregado
+        // Criar gráfico de caminhada
+        criarGrafico("graficoCaminhada", "Caminhada", dadosCaminhada);
+
+        // Criar gráfico de pedalada
+        criarGrafico("graficoPedalada", "Pedalada", dadosPedalada);
+
+        // Criar gráfico de passos
+        criarGrafico("graficoPassos", "Passos", dadosPassos);
+    });
+}
+
+// Chamar a função para exibir os gráficos após o DOM ser completamente carregado
 document.addEventListener("DOMContentLoaded", function () {
     exibirGraficos();
 
