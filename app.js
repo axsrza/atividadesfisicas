@@ -1,18 +1,21 @@
-// Configuração do Firebase
+// Importe as funções necessárias dos SDKs que você precisa
+import { initializeApp } from "firebase/app";
+import { getFirestore, collection, addDoc } from "firebase/firestore";
+import { Chart } from "chart.js";
+
+// Sua configuração Firebase para o aplicativo da web
 const firebaseConfig = {
-    apiKey: "SuaChaveDeAPI",
+    apiKey: "AIzaSyAohbxWMgVo48A6QDh-_fjP2c2MZzmqJL4",
     authDomain: "atividadesfisicas-e9c51.firebaseapp.com",
     projectId: "atividadesfisicas-e9c51",
     storageBucket: "atividadesfisicas-e9c51.appspot.com",
-    messagingSenderId: "SeuID",
-    appId: "SuaAppID"
+    messagingSenderId: "785815132104",
+    appId: "785815132104"
 };
 
-// Inicialização do Firebase
-firebase.initializeApp(firebaseConfig);
-
-// Inicialização do Firestore
-const db = firebase.firestore();
+// Inicialize o Firebase
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);  // Inicialize o Firestore
 
 // Lógica para exibir os campos de detalhes conforme o tipo de atividade selecionada
 document.getElementById("tipoAtividade").addEventListener("change", function () {
@@ -43,7 +46,7 @@ function adicionarAtividade() {
     }
 
     // Adicionar atividade ao Firestore
-    db.collection("atividades").add({
+    addDoc(collection(db, "atividades"), {
         tipo: tipoAtividade,
         detalhes: detalhes,
         data: data
