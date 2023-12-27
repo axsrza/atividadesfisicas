@@ -1,5 +1,5 @@
 // Sua configuração Firebase para o aplicativo da web
-var firebaseConfig = {
+const firebaseConfig = {
     apiKey: "AIzaSyAohbxWMgVo48A6QDh-_fjP2c2MZzmqJL4",
     authDomain: "atividadesfisicas-e9c51.firebaseapp.com",
     projectId: "atividadesfisicas-e9c51",
@@ -9,12 +9,12 @@ var firebaseConfig = {
 };
 
 // Inicialize o Firebase
-var app = firebase.initializeApp(firebaseConfig);
-var db = firebase.firestore(app);  // Inicialize o Firestore
+firebase.initializeApp(firebaseConfig);
+const db = firebase.firestore();  // Inicialize o Firestore
 
 // Lógica para exibir os campos de detalhes conforme o tipo de atividade selecionada
 document.getElementById("tipoAtividade").addEventListener("change", function () {
-    var tipoAtividade = this.value;
+    const tipoAtividade = this.value;
 
     document.getElementById("detalhesCaminhada").style.display = tipoAtividade === "caminhada" ? "block" : "none";
     document.getElementById("detalhesPedalada").style.display = tipoAtividade === "pedalada" ? "block" : "none";
@@ -23,25 +23,25 @@ document.getElementById("tipoAtividade").addEventListener("change", function () 
 
 // Lógica para adicionar atividade
 function adicionarAtividade() {
-    var tipoAtividade = document.getElementById("tipoAtividade").value;
-    var data = new Date();
+    const tipoAtividade = document.getElementById("tipoAtividade").value;
+    const data = new Date();
 
-    var detalhes;
+    let detalhes;
     if (tipoAtividade === "caminhada") {
-        var km = parseFloat(document.getElementById("km").value);
-        var tempo = parseInt(document.getElementById("tempo").value);
-        detalhes = { km: km, tempo: tempo };
+        const km = parseFloat(document.getElementById("km").value);
+        const tempo = parseInt(document.getElementById("tempo").value);
+        detalhes = { km, tempo };
     } else if (tipoAtividade === "pedalada") {
-        var kmPedalada = parseFloat(document.getElementById("kmPedalada").value);
-        var tempoPedalada = parseInt(document.getElementById("tempoPedalada").value);
-        detalhes = { kmPedalada: kmPedalada, tempoPedalada: tempoPedalada };
+        const kmPedalada = parseFloat(document.getElementById("kmPedalada").value);
+        const tempoPedalada = parseInt(document.getElementById("tempoPedalada").value);
+        detalhes = { kmPedalada, tempoPedalada };
     } else if (tipoAtividade === "passos") {
-        var passos = parseInt(document.getElementById("passos").value);
-        detalhes = { passos: passos };
+        const passos = parseInt(document.getElementById("passos").value);
+        detalhes = { passos };
     }
 
     // Adicionar atividade ao Firestore
-    firebase.firestore().collection("atividades").add({
+    db.collection("atividades").add({
         tipo: tipoAtividade,
         detalhes: detalhes,
         data: data
@@ -70,13 +70,13 @@ function limparCampos() {
 function exibirGraficos() {
     // Recuperar dados do Firestore
     db.collection("atividades").get().then((querySnapshot) => {
-        var dadosCaminhada = [];
-        var dadosPedalada = [];
-        var dadosPassos = [];
+        const dadosCaminhada = [];
+        const dadosPedalada = [];
+        const dadosPassos = [];
 
         querySnapshot.forEach((doc) => {
-            var atividade = doc.data();
-            var data = atividade.data.toDate();
+            const atividade = doc.data();
+            const data = atividade.data.toDate();
 
             if (atividade.tipo === "caminhada") {
                 dadosCaminhada.push({
@@ -109,7 +109,7 @@ function exibirGraficos() {
 
 // Função para criar gráfico usando Chart.js
 function criarGrafico(idCanvas, label, dados) {
-    var ctx = document.getElementById(idCanvas).getContext('2d');
+    const ctx = document.getElementById(idCanvas).getContext('2d');
     new Chart(ctx, {
         type: 'line',
         data: {
