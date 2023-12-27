@@ -180,7 +180,8 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 
-    // Chamar a função para exibir os gráficos
+    // Chamar a função para exibir os gráficos após o DOM ser completamente carregado
+document.addEventListener("DOMContentLoaded", function () {
     exibirGraficos();
 
     // Adicionar evento de clique ao botão de adicionar atividade
