@@ -68,6 +68,9 @@ function limparCampos() {
 
 // Lógica para exibir gráficos
 function exibirGraficos() {
+    // Configurar adaptador de data
+    Chart.register(ChartTime);
+
     // Recuperar dados do Firestore
     db.collection("atividades").get().then((querySnapshot) => {
         const dadosCaminhada = [];
@@ -95,9 +98,6 @@ function exibirGraficos() {
                 });
             }
         });
-
-        // Configurar adaptador de data
-        Chart.defaults.adapters.date = luxonAdapter;
 
         // Criar gráfico de caminhada
         criarGrafico("graficoCaminhada", "Caminhada", dadosCaminhada);
