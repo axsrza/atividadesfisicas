@@ -20,7 +20,33 @@
 
     <!-- Formulário para adicionar atividade -->
     <form id="formAtividade">
-        <!-- ... Seu formulário ... -->
+        <label for="tipoAtividade">Tipo de Atividade:</label>
+        <select id="tipoAtividade" name="tipoAtividade">
+            <option value="caminhada">Caminhada</option>
+            <option value="pedalada">Pedalada</option>
+            <option value="passos">Passos</option>
+        </select>
+
+        <div id="detalhesCaminhada" style="display: none;">
+            <label for="km">Distância (KM):</label>
+            <input type="text" id="km" name="km">
+            <label for="tempo">Tempo (minutos):</label>
+            <input type="text" id="tempo" name="tempo">
+        </div>
+
+        <div id="detalhesPedalada" style="display: none;">
+            <label for="kmPedalada">Distância da Pedalada (KM):</label>
+            <input type="text" id="kmPedalada" name="kmPedalada">
+            <label for="tempoPedalada">Tempo da Pedalada (minutos):</label>
+            <input type="text" id="tempoPedalada" name="tempoPedalada">
+        </div>
+
+        <div id="detalhesPassos" style="display: none;">
+            <label for="passos">Quantidade de Passos:</label>
+            <input type="text" id="passos" name="passos">
+        </div>
+
+        <button type="button" id="adicionarAtividadeBtn">Adicionar Atividade</button>
     </form>
 
     <!-- Gráficos -->
