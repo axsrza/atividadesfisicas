@@ -105,43 +105,43 @@ function exibirGraficos() {
         // Criar gráfico de passos
         criarGrafico("graficoPassos", "Passos", dadosPassos);
     });
-}
 
-// Função para criar gráfico usando Chart.js
-function criarGrafico(idCanvas, label, dados) {
-    const ctx = document.getElementById(idCanvas).getContext('2d');
-    new Chart(ctx, {
-        type: 'line',
-        data: {
-            datasets: [{
-                label: label,
-                data: dados,
-                borderColor: 'rgba(75, 192, 192, 1)',
-                borderWidth: 1,
-                fill: false
-            }]
-        },
-        options: {
-            scales: {
-                x: {
-                    type: 'time',
-                    time: {
-                        unit: 'day'
+    // Função para criar gráfico usando Chart.js
+    function criarGrafico(idCanvas, label, dados) {
+        const ctx = document.getElementById(idCanvas).getContext('2d');
+        new Chart(ctx, {
+            type: 'line',
+            data: {
+                datasets: [{
+                    label: label,
+                    data: dados,
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    borderWidth: 1,
+                    fill: false
+                }]
+            },
+            options: {
+                scales: {
+                    x: {
+                        type: 'time',
+                        time: {
+                            unit: 'day'
+                        },
+                        title: {
+                            display: true,
+                            text: 'Data'
+                        }
                     },
-                    title: {
-                        display: true,
-                        text: 'Data'
-                    }
-                },
-                y: {
-                    title: {
-                        display: true,
-                        text: label === 'Passos' ? 'Quantidade de Passos' : 'Distância (KM)'
+                    y: {
+                        title: {
+                            display: true,
+                            text: label === 'Passos' ? 'Quantidade de Passos' : 'Distância (KM)'
+                        }
                     }
                 }
             }
-        }
-    });
+        });
+    }
 }
 
 // Chamar a função para exibir os gráficos
