@@ -1,10 +1,5 @@
-// Importe as funções necessárias dos SDKs que você precisa
-import { initializeApp } from "firebase/app";
-import { getFirestore, collection, addDoc } from "firebase/firestore";
-import { Chart } from "chart.js";
-
 // Sua configuração Firebase para o aplicativo da web
-const firebaseConfig = {
+var firebaseConfig = {
     apiKey: "AIzaSyAohbxWMgVo48A6QDh-_fjP2c2MZzmqJL4",
     authDomain: "atividadesfisicas-e9c51.firebaseapp.com",
     projectId: "atividadesfisicas-e9c51",
@@ -14,12 +9,12 @@ const firebaseConfig = {
 };
 
 // Inicialize o Firebase
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);  // Inicialize o Firestore
+var app = firebase.initializeApp(firebaseConfig);
+var db = firebase.firestore(app);  // Inicialize o Firestore
 
 // Lógica para exibir os campos de detalhes conforme o tipo de atividade selecionada
 document.getElementById("tipoAtividade").addEventListener("change", function () {
-    const tipoAtividade = this.value;
+    var tipoAtividade = this.value;
 
     document.getElementById("detalhesCaminhada").style.display = tipoAtividade === "caminhada" ? "block" : "none";
     document.getElementById("detalhesPedalada").style.display = tipoAtividade === "pedalada" ? "block" : "none";
@@ -28,25 +23,25 @@ document.getElementById("tipoAtividade").addEventListener("change", function () 
 
 // Lógica para adicionar atividade
 function adicionarAtividade() {
-    const tipoAtividade = document.getElementById("tipoAtividade").value;
-    const data = new Date();
+    var tipoAtividade = document.getElementById("tipoAtividade").value;
+    var data = new Date();
 
-    let detalhes;
+    var detalhes;
     if (tipoAtividade === "caminhada") {
-        const km = parseFloat(document.getElementById("km").value);
-        const tempo = parseInt(document.getElementById("tempo").value);
-        detalhes = { km, tempo };
+        var km = parseFloat(document.getElementById("km").value);
+        var tempo = parseInt(document.getElementById("tempo").value);
+        detalhes = { km: km, tempo: tempo };
     } else if (tipoAtividade === "pedalada") {
-        const kmPedalada = parseFloat(document.getElementById("kmPedalada").value);
-        const tempoPedalada = parseInt(document.getElementById("tempoPedalada").value);
-        detalhes = { kmPedalada, tempoPedalada };
+        var kmPedalada = parseFloat(document.getElementById("kmPedalada").value);
+        var tempoPedalada = parseInt(document.getElementById("tempoPedalada").value);
+        detalhes = { kmPedalada: kmPedalada, tempoPedalada: tempoPedalada };
     } else if (tipoAtividade === "passos") {
-        const passos = parseInt(document.getElementById("passos").value);
-        detalhes = { passos };
+        var passos = parseInt(document.getElementById("passos").value);
+        detalhes = { passos: passos };
     }
 
     // Adicionar atividade ao Firestore
-    addDoc(collection(db, "atividades"), {
+    firebase.firestore().collection("atividades").add({
         tipo: tipoAtividade,
         detalhes: detalhes,
         data: data
@@ -75,13 +70,13 @@ function limparCampos() {
 function exibirGraficos() {
     // Recuperar dados do Firestore
     db.collection("atividades").get().then((querySnapshot) => {
-        const dadosCaminhada = [];
-        const dadosPedalada = [];
-        const dadosPassos = [];
+        var dadosCaminhada = [];
+        var dadosPedalada = [];
+        var dadosPassos = [];
 
         querySnapshot.forEach((doc) => {
-            const atividade = doc.data();
-            const data = atividade.data.toDate();
+            var atividade = doc.data();
+            var data = atividade.data.toDate();
 
             if (atividade.tipo === "caminhada") {
                 dadosCaminhada.push({
@@ -114,7 +109,7 @@ function exibirGraficos() {
 
 // Função para criar gráfico usando Chart.js
 function criarGrafico(idCanvas, label, dados) {
-    const ctx = document.getElementById(idCanvas).getContext('2d');
+    var ctx = document.getElementById(idCanvas).getContext('2d');
     new Chart(ctx, {
         type: 'line',
         data: {
