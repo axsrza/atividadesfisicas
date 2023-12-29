@@ -12,7 +12,11 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();  // Inicialize o Firestore
 
-// Configurar adaptador de tempo com Moment.js
+// Configurar adaptador de tempo com Moment.js diretamente no Chart.js
+Chart.defaults.plugins.legend.display = false;
+Chart.defaults.plugins.tooltip.enabled = false;
+Chart.defaults.font.size = 16;
+
 const ChartTime = {
     id: 'time',
     adapters: {
@@ -34,6 +38,8 @@ const ChartTime = {
     },
 };
 
+Chart.register(ChartTime);
+
 // Lógica para exibir os campos de detalhes conforme o tipo de atividade selecionada
 document.getElementById("tipoAtividade").addEventListener("change", function () {
     const tipoAtividade = this.value;
@@ -45,27 +51,129 @@ document.getElementById("tipoAtividade").addEventListener("change", function () 
 
 // Lógica para adicionar atividade
 function adicionarAtividade() {
-    // ... (o restante da lógica para adicionar atividade permanece inalterado) ...
+    const tipoAtividade = document.getElementById("tipoAtividade").value;
+    const data = new Date();
+
+    let detalhes;
+    if (tipoAtividade === "caminhada") {
+        const km = parseFloat(document.getElementById("km").value);
+        const tempo = parseInt(document.getElementById("tempo").value);
+        detalhes = { km, tempo };
+    } else if (tipoAtividade === "pedalada") {
+        const kmPedalada = parseFloat(document.getElementById("kmPedalada").value);
+        const tempoPedalada = parseInt(document.getElementById("tempoPedalada").value);
+        detalhes = { kmPedalada, tempoPedalada };
+    } else if (tipoAtividade === "passos") {
+        const passos = parseInt(document.getElementById("passos").value);
+        detalhes = { passos };
+    }
+
+    // Adicionar atividade ao Firestore
+    db.collection("atividades").add({
+        tipo: tipoAtividade,
+        detalhes: detalhes,
+        data: data
+    })
+        .then(function (docRef) {
+            console.log("Atividade adicionada com ID: ", docRef.id);
+        })
+        .catch(function (error) {
+            console.error("Erro ao adicionar atividade: ", error);
+        });
+
+    // Limpar campos após adicionar atividade (opcional)
+    limparCampos();
 }
 
 // Função para limpar campos do formulário (opcional)
 function limparCampos() {
-    // ... (o restante da lógica para limpar campos permanece inalterado) ...
+    document.getElementById("km").value = "";
+    document.getElementById("tempo").value = "";
+    document.getElementById("kmPedalada").value = "";
+    document.getElementById("tempoPedalada").value = "";
+    document.getElementById("passos").value = "";
 }
 
 // Lógica para exibir gráficos
 function exibirGraficos() {
-    // ... (o restante da lógica para exibir gráficos permanece inalterado) ...
+    // Recuperar dados do Firestore
+    db.collection("atividades").get().then((querySnapshot) => {
+        const dadosCaminhada = [];
+        const dadosPedalada = [];
+        const dadosPassos = [];
+
+        querySnapshot.forEach((doc) => {
+            const atividade = doc.data();
+            const data = atividade.data.toDate();
+
+            if (atividade.tipo === "caminhada") {
+                dadosCaminhada.push({
+                    x: data,
+                    y: atividade.detalhes.km
+                });
+            } else if (atividade.tipo === "pedalada") {
+                dadosPedalada.push({
+                    x: data,
+                    y: atividade.detalhes.kmPedalada
+                });
+            } else if (atividade.tipo === "passos") {
+                dadosPassos.push({
+                    x: data,
+                    y: atividade.detalhes.passos
+                });
+            }
+        });
+
+        // Criar gráfico de caminhada
+        criarGrafico("graficoCaminhada", "Caminhada", dadosCaminhada);
+
+        // Criar gráfico de pedalada
+        criarGrafico("graficoPedalada", "Pedalada", dadosPedalada);
+
+        // Criar gráfico de passos
+        criarGrafico("graficoPassos", "Passos", dadosPassos);
+    });
 }
 
 // Função para criar gráfico usando Chart.js
 function criarGrafico(idCanvas, label, dados) {
-    // ... (o restante da lógica para criar gráfico permanece inalterado) ...
+    const ctx = document.getElementById(idCanvas).getContext('2d');
+    new Chart(ctx, {
+        type: 'line',
+        data: {
+            datasets: [{
+                label: label,
+                data: dados,
+                borderColor: 'rgba(75, 192, 192, 1)',
+                borderWidth: 1,
+                fill: false
+            }]
+        },
+        options: {
+            scales: {
+                x: {
+                    type: 'time',
+                    time: {
+                        unit: 'day'
+                    },
+                    title: {
+                        display: true,
+                        text: 'Data'
+                    }
+                },
+                y: {
+                    title: {
+                        display: true,
+                        text: label === 'Passos' ? 'Quantidade de Passos' : 'Distância (KM)'
+                    }
+                }
+            }
+        }
+    });
 }
 
 // Chamar a função para exibir os gráficos após o DOM ser completamente carregado
 document.addEventListener("DOMContentLoaded", function () {
-    Chart.register(ChartTime);  // Certifique-se de que está registrado antes de exibir os gráficos
     exibirGraficos();
 
     // Adicionar evento de clique ao botão de adicionar atividade
