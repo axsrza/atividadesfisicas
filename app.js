@@ -44,9 +44,19 @@ Chart.register(ChartTime);
 document.getElementById("tipoAtividade").addEventListener("change", function () {
     const tipoAtividade = this.value;
 
-    document.getElementById("detalhesCaminhada").style.display = tipoAtividade === "caminhada" ? "block" : "none";
-    document.getElementById("detalhesPedalada").style.display = tipoAtividade === "pedalada" ? "block" : "none";
-    document.getElementById("detalhesPassos").style.display = tipoAtividade === "passos" ? "block" : "none";
+    // Ocultar todos os campos de detalhes primeiro
+    document.getElementById("detalhesCaminhada").style.display = "none";
+    document.getElementById("detalhesPedalada").style.display = "none";
+    document.getElementById("detalhesPassos").style.display = "none";
+
+    // Em seguida, exibir os campos de detalhes correspondentes ao tipo de atividade selecionada
+    if (tipoAtividade === "caminhada") {
+        document.getElementById("detalhesCaminhada").style.display = "block";
+    } else if (tipoAtividade === "pedalada") {
+        document.getElementById("detalhesPedalada").style.display = "block";
+    } else if (tipoAtividade === "passos") {
+        document.getElementById("detalhesPassos").style.display = "block";
+    }
 });
 
 // Lógica para adicionar atividade
