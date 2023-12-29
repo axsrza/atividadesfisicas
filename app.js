@@ -42,7 +42,24 @@ Chart.register(ChartTime);
 
 // Lógica para exibir os campos de detalhes conforme o tipo de atividade selecionada
 document.getElementById("tipoAtividade").addEventListener("change", function () {
-    const tipoAtividade = this.value;
+    exibirCamposDetalhes();
+});
+
+// Chamar a função para exibir os gráficos após o DOM ser completamente carregado
+document.addEventListener("DOMContentLoaded", function () {
+    // Adicionar evento de clique ao botão de adicionar atividade
+    document.getElementById("adicionarAtividadeBtn").addEventListener("click", adicionarAtividade);
+
+    // Exibir campos de detalhes na inicialização
+    exibirCamposDetalhes();
+
+    // Exibir gráficos
+    exibirGraficos();
+});
+
+// Função para exibir os campos de detalhes com base no tipo de atividade selecionada
+function exibirCamposDetalhes() {
+    const tipoAtividade = document.getElementById("tipoAtividade").value;
 
     // Ocultar todos os campos de detalhes primeiro
     document.getElementById("detalhesCaminhada").style.display = "none";
@@ -57,7 +74,7 @@ document.getElementById("tipoAtividade").addEventListener("change", function () 
     } else if (tipoAtividade === "passos") {
         document.getElementById("detalhesPassos").style.display = "block";
     }
-});
+}
 
 // Lógica para adicionar atividade
 function adicionarAtividade() {
@@ -181,11 +198,3 @@ function criarGrafico(idCanvas, label, dados) {
         }
     });
 }
-
-// Chamar a função para exibir os gráficos após o DOM ser completamente carregado
-document.addEventListener("DOMContentLoaded", function () {
-    exibirGraficos();
-
-    // Adicionar evento de clique ao botão de adicionar atividade
-    document.getElementById("adicionarAtividadeBtn").addEventListener("click", adicionarAtividade);
-});
