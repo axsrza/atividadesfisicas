@@ -12,16 +12,15 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();  // Inicialize o Firestore
 
-// Configurar adaptador de tempo com Moment.js diretamente no Chart.js
-Chart.defaults.plugins.legend.display = false;
-Chart.defaults.plugins.tooltip.enabled = false;
-Chart.defaults.font.size = 16;
-
+// Configurar adaptador de tempo com Luxon
 const ChartTime = {
     id: 'time',
     adapters: {
         date: {
-            parser: 'moment',
+            inputTimeUnit: 'millisecond',
+            parser: 'luxon',
+            round: 'luxon',
+            isoWeekday: false,
             unit: false,
             displayFormats: {
                 millisecond: 'SSS [ms]',
